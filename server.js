@@ -29,7 +29,8 @@ const server = http.createServer(app); // Create HTTP server
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: [ "http://localhost:3000",
+    "https://freelance-platform-frontend-vxc5.vercel.app/"]
     credentials: true,
   },
 });
@@ -172,3 +173,4 @@ server.listen(8800, () => {
   connect();
   console.log("🚀 Server running on port 8800");
 });
+
