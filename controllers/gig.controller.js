@@ -18,10 +18,9 @@ export const createGig = async (req, res) => {
       shortDesc,
       features,
       tags,
-      profile, // this will be present in req.body
+      profile, 
     } = req.body;
 
-    // STEP 1: Parse skills
     let parsedSkills = [];
     try {
       parsedSkills = JSON.parse(skills);
@@ -31,7 +30,6 @@ export const createGig = async (req, res) => {
       });
     }
 
-    // STEP 2: Parse profile
     let profileData;
     try {
       profileData = JSON.parse(profile);
@@ -41,7 +39,6 @@ export const createGig = async (req, res) => {
       });
     }
 
-    // STEP 3: Save or Update freelancer profile
     const existingProfile = await FreelancerProfile.findOne({ userId: req.user.id });
     if (existingProfile) {
       await FreelancerProfile.findOneAndUpdate(
@@ -54,7 +51,6 @@ export const createGig = async (req, res) => {
       await newProfile.save();
     }
 
-    // STEP 4: Create new gig
     const newGig = new Gig({
       userId: req.user.id,
       title,
