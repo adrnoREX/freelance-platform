@@ -25,7 +25,7 @@ router.post("/register", upload.single("img"), async (req, res) => {
     const img = req.file?.filename;
 
     if (!username || !email || !password) {
-      console.log("⚠️ Missing required fields");
+      console.log("Missing required fields");
       return res.status(400).json({ message: "Missing required fields" });
     }
 
