@@ -7,7 +7,6 @@ import freelancerRoute from "./routes/freelancer.route.js";
 import orderRoute from "./routes/order.route.js";
 import messageRoute from "./routes/message.route.js";
 import reviewRoute from "./routes/review.route.js";
-// import conversationRoute from "./routes/conversation.route.js"
 import authRoute from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -25,7 +24,7 @@ dotenv.config();
 
 
 const app = express();
-const server = http.createServer(app); // Create HTTP server
+const server = http.createServer(app); 
 
 const io = new Server(server, {
   cors: {
@@ -35,18 +34,16 @@ const io = new Server(server, {
   },
 });
 
-// Mongoose connection
 mongoose.set("strictQuery", true);
 const connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB is running!");
+    console.log("MongoDB is running!");
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
+    console.error("MongoDB connection error:", error);
   }
 };
 
-// Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -67,7 +64,6 @@ app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/gig", gigRoute);
 app.use("/api/freelancer", freelancerRoute);
-// app.use("/api/conversations", conversationRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/review", reviewRoute);
 app.use("/api/orders", orderRoute);
@@ -86,40 +82,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 🧠 Socket.io logic
+// Socket.io logic
 io.on("connection", (socket) => {
-  console.log("🟢 A user connected");
+  console.log("A user connected");
 
   socket.on("join", (userId) => {
     socket.join(userId); // join personal room
     console.log(`User ${userId} joined their room`);
   });
 
-  // socket.on("sendMessage", async (message) => {
-  //   try {
-  //     const { _id, from, to } = message;
-  
-  //     if (!_id || !from || !to) {
-  //       console.error("Missing message fields:", message);
-  //       return;
-  //     }
-  //     await Message.findByIdAndUpdate(_id, { delivered: true });
-  
-  //     io.to(to.toString()).emit("receiveMessage", {
-  //       ...message,
-  //       delivered: true,
-  //       seen: false,
-  //     });
-  
-  //     io.to(from.toString()).emit("receiveMessage", {
-  //       ...message,
-  //       delivered: true,
-  //       seen: false,
-  //     });
-  //   } catch (err) {
-  //     console.error("Error setting delivered status:", err);
-  //   }
-  // });
   socket.on("sendMessage", async (message) => {
     try {
       const msg = await Message.findById(message._id);
@@ -137,14 +108,7 @@ io.on("connection", (socket) => {
     }
   });  
 
-  
 
-
-  // socket.on("markAsSeen", ({ messageId, to }) => {
-  //   io.to(to.toString()).emit("messageSeen", messageId);
-  // });
-
-  // When message is seen
   socket.on("messageSeen", async ({ messageId, from, to }) => {
     try {
       const updated = await Message.findByIdAndUpdate(
@@ -164,14 +128,15 @@ io.on("connection", (socket) => {
   
 
   socket.on("disconnect", () => {
-    console.log("🔴 A user disconnected");
+    console.log("A user disconnected");
   });
 });
 
 // Server listen
 server.listen(8800, () => {
   connect();
-  console.log("🚀 Server running on port 8800");
+  console.log("Server running on port 8800");
 });
+
 
 
