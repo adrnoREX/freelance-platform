@@ -34,7 +34,7 @@ export const register = async (req, res, next) => {
 
     await newUser.save()
       .catch((err) => {
-        console.error("❌ Error saving user:", err);
+        console.error("Error saving user:", err);
       });
 
     const { password: pass, ...info } = newUser._doc;
@@ -87,3 +87,4 @@ export const logout = async (req, res) => {
     .status(200)
     .send("User has been logout");
 };
+
