@@ -14,7 +14,7 @@ export const createMessage = async (req, res, next) => {
       return next(createError(400, "Missing gigId or text"));
     }
 
-    const images = req.files; // array of image files
+    const images = req.files; 
 
     
     if (!mongoose.Types.ObjectId.isValid(gigId)) {
