@@ -10,7 +10,6 @@ import { verifyToken } from "../middleware/jwt.js";
 
 const router = express.Router();
 
-// Setup for file storage (uploads folder)
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -21,7 +20,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// POST: /api/gig/
 router.post(
   "/",
   verifyToken,
